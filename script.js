@@ -49,6 +49,7 @@ async function fetchAndSetAvatar() {
       "#post-profile-pic",
       "#comment-section-profile-image",
       "#create-profile-img",
+      "#edit-profile-img",
     ];
     avatarTargets.forEach((sel) => {
       const el = document.querySelector(sel);
@@ -792,7 +793,7 @@ async function generatePosts(posts, container) {
 
           const editUserProfileImg =
             editPostContainer.querySelector("#edit-profile-img") ||
-            editPostContainer.querySelector("#create-profile-img") ||
+            editPostContainer.querySelector("#edit-profile-img") ||
             editPostContainer.querySelector(".edit-content img");
 
           const editUsernameEl =
