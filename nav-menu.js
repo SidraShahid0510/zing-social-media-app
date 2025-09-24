@@ -75,7 +75,7 @@ function performLogout() {
     console.warn("Could not clear storage:", error); // fixed variable name
   } finally {
     if (navMenu) navMenu.style.display = "none";
-    window.location.href = "login.html";
+    window.location.href = "index.html";
   }
 }
 

@@ -3,16 +3,15 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>zing-My profile</title>
+    <title>zing-feed</title>
     <meta
       name="description"
-      content="Manage your Zing profile! Update your bio, share posts, and customize your personal space on our vibrant social media platform."
+      content="Stay connected on Zing! Explore your feed, share updates, like posts, and engage with friends on our vibrant social media platform."
     />
 
     <link rel="stylesheet" href="styles.css" />
-    <link rel="stylesheet" href="login-user.css" />
     <link rel="stylesheet" href="shared-nav.css" />
-
+    <link rel="stylesheet" href="login-user.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css"
@@ -180,27 +179,8 @@
         </div>
       </div>
     </nav>
+    <!-------------create post section--------------->
 
-    <div class="profile-banner">
-      <!-- Banner image -->
-      <img
-        id="profile-banner-img"
-        src="images/default-banner.jpg"
-        alt="Profile Banner"
-      />
-
-      <!-- Edit button (bottom right) -->
-      <button id="edit-cover-btn" class="edit-cover-btn">
-        Edit Cover Image
-      </button>
-    </div>
-
-    <div class="edit-cover-container hidden" id="edit-cover-container">
-      <input type="url" id="banner-Url-input" placeholder="Enter image URL" />
-      <button id="save-banner-btn" class="save-cover-btn">Save</button>
-    </div>
-
-    <!-- Create post container -->
     <div class="create-post-container">
       <div class="create-post-section">
         <div class="create-header">
@@ -427,54 +407,60 @@
         <div class="edit-post-btn">Save</div>
       </div>
     </div>
-    <!-- main container -->
-    <div id="main-container">
+    <!------------------- user post detail page---------------------- -->
+    <div class="post-detail-container">
+      <div class="post-detail-section">
+        <div class="post-detail-header">
+          <h1>Post</h1>
+          <i class="fa-solid fa-circle-xmark" id="close-post-detail"></i>
+        </div>
+        <div class="post-detail-content"></div>
+      </div>
+    </div>
+
+    <div class="container">
       <!-- left sidebar starts here -->
-      <div class="profile-detail-left">
-        <div class="login-user">
-          <div class="log-user-image">
-            <img src="images/default-avatar.png" alt="log-user-image" />
-          </div>
-          <div class="profile-username">
-            <p>Sidra Shahid</p>
-          </div>
-        </div>
-        <div class="update-login-user">
-          <p>update image</p>
-          <input type="url" id="update-user" placeholder="Enter image URL" />
+      <div class="left-sidebar">
+        <div class="left-sidebar-links">
+          <a href="feed.html"
+            ><i class="fa-solid fa-house"></i>
+            <p>Home</p></a
+          >
         </div>
 
-        <div class="user-posts-info">
-          <div class="posts-info">
-            <p id="posts-count">12</p>
-            <p>Posts</p>
-          </div>
-
-          <div class="posts-info">
-            <p id="following-count">260</p>
-            <p>Following</p>
-          </div>
+        <div class="left-sidebar-links">
+          <i class="fa-solid fa-bookmark"></i>
+          <p>Saved</p>
         </div>
-        <!-- Bio Form (visible initially if bio is empty) -->
-        <h1 class="bio-heading">Bio</h1>
-
-        <div id="bioFormContainer">
-          <form id="bioForm">
-            <textarea id="bio" placeholder="Write your bio here..."></textarea>
-            <button type="submit">Save Bio</button>
-          </form>
-
-          <p id="status"></p>
+        <div class="left-sidebar-links">
+          <i class="fa-solid fa-user-group"></i>
+          <p>Friends</p>
         </div>
-
-        <div id="bioDisplayContainer" style="display: none">
-          <p id="bioText"></p>
-          <button id="editBioBtn">Edit Bio</button>
+        <div class="left-sidebar-links">
+          <i class="fa-solid fa-calendar-days"></i>
+          <p>Events</p>
+        </div>
+        <div class="left-sidebar-links">
+          <i class="fa-solid fa-video"></i>
+          <p>Videos</p>
+        </div>
+        <div class="left-sidebar-links">
+          <i class="fa-solid fa-image"></i>
+          <p>Photos</p>
+        </div>
+        <div class="left-sidebar-links">
+          <i class="fa-solid fa-file"></i>
+          <p>Files</p>
+        </div>
+        <div class="left-sidebar-links">
+          <i class="fa-solid fa-gamepad"></i>
+          <p>Games</p>
         </div>
       </div>
 
-      <!-- right sidebar starts here -->
-      <div class="main-content profile-detail-right" id="profile-detail-right">
+      <!-- main content starts here -->
+
+      <div class="main-content">
         <div class="write-post-section">
           <div class="write-post">
             <img
@@ -506,27 +492,100 @@
             <div class="post-btn">Post</div>
           </div>
         </div>
-
-        <div class="profile-post-container" id="profile-post-container"></div>
+        <h1>Feeds</h1>
+        <div class="post-container" id="post-container"></div>
       </div>
-    </div>
 
-    <!-- post detail container -->
-    <div class="post-detail-container">
-      <div class="post-detail-section">
-        <div class="post-detail-header">
-          <h1>Post</h1>
-          <i class="fa-solid fa-circle-xmark" id="close-post-detail"></i>
+      <!-- right sidebar starts here -->
+
+      <div class="right-sidebar">
+        <div class="stories-wrapper">
+          <h1>Stories</h1>
+          <div class="stories-section">
+            <div class="story">
+              <img src="images/food1-image.jpg" alt="" />
+              <div class="story-footer">
+                <img src="images/icons8-plus.svg" alt="" class="profile-pic" />
+                <p>Post story</p>
+              </div>
+            </div>
+            <div class="story">
+              <img src="images/food2-image.jpg" alt="" />
+              <div class="story-footer">
+                <img src="images/food2-image.jpg" alt="" class="profile-pic" />
+                <p>Anna</p>
+              </div>
+            </div>
+            <div class="story">
+              <img src="images/food3-image.jpg" alt="" />
+              <div class="story-footer">
+                <img src="images/food3-image.jpg" alt="" class="profile-pic" />
+                <p>Sara</p>
+              </div>
+            </div>
+            <div class="story">
+              <img src="images/food4-image.jpg" alt="" />
+              <div class="story-footer">
+                <img src="images/food4-image.jpg" alt="" class="profile-pic" />
+                <p>Tina</p>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="post-detail-content"></div>
+        <div class="events">
+          <h1>Events</h1>
+          <div class="event-details">
+            <i class="fa-solid fa-calendar-days"></i>
+            <p>4 events invites</p>
+          </div>
+          <div class="event-details">
+            <i class="fa-solid fa-cake-candles"></i>
+            <p>Today Maria's birthday</p>
+          </div>
+        </div>
+        <div class="contacts">
+          <h1>Contacts</h1>
+          <div class="contacts-details">
+            <div class="contact-info">
+              <img src="images/maria.jpg" alt="" />
+              <p>Maria</p>
+            </div>
+            <div class="contact-info">
+              <img src="images/Tina.jpg" alt="" />
+              <p>Tina</p>
+            </div>
+            <div class="contact-info">
+              <img src="images/oliver.jpg" alt="" />
+              <p>Oliver</p>
+            </div>
+            <div class="contact-info">
+              <img src="images/sara.jpg" alt="" />
+              <p>Sara</p>
+            </div>
+            <div class="contact-info">
+              <img src="images/sophia.jpg" alt="" />
+              <p>Sophia</p>
+            </div>
+            <div class="contact-info">
+              <img src="images/Urwah.jpg" alt="" />
+              <p>Urwah</p>
+            </div>
+            <div class="contact-info">
+              <img src="images/Mathias.jpg" alt="" />
+              <p>Mathias</p>
+            </div>
+            <div class="contact-info">
+              <img src="images/tania.jpg" alt="" />
+              <p>Tania</p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <footer>
       <p>Copyright 2025 -Zing</p>
     </footer>
-
-    <script src="script.js"></script>
-    <script src="login-user.js"></script>
     <script src="nav-menu.js"></script>
+    <script src="script.js"></script>
   </body>
 </html>

@@ -1,49 +1,26 @@
-/**
- * @typedef {Object} Author
- * @property {string} name
- * @property {{ url?: string }} [avatar]
- */
-
-/**
- * @typedef {Object} Media
- * @property {string} url
- * @property {string} [alt]
- */
-
-/**
- * @typedef {Object} PostCounts
- * @property {number} [reactions]
- * @property {number} [comments]
- */
-
-/**
- * @typedef {Object} CommentItem
- * @property {string} id
- * @property {Author} author
- * @property {string} body
- * @property {string} created
- */
-
-/**
- * @typedef {Object} Post
- * @property {string} id
- * @property {string} title
- * @property {string} body
- * @property {string} created
- * @property {Author} author
- * @property {Media} [media]
- * @property {PostCounts} [_count]
- * @property {CommentItem[]} [comments]
- * @property {string} [feeling]
- */
-
 const postContainer = document.querySelector(".post-container");
 const Noroff_API_Key = "384ffc1f-5fb6-497c-b8ef-68eb6ba14e6f";
 const DEFAULT_AVATAR = "images/default-avatar.png";
+const DEFAULT_POST_IMAGE = "images/defualt-img.jpg";
+function attachImgFallback(img, fallbackUrl) {
+  if (!img) return;
+  const onErr = () => {
+    img.removeEventListener("error", onErr);
+    img.src = fallbackUrl;
+  };
+  img.addEventListener("error", onErr, { once: true });
 
+  // If src is empty or whitespace, use fallback immediately
+  const s = (img.getAttribute("src") || "").trim();
+  if (!s) img.src = fallbackUrl;
+}
 let currentAvatarUrl = DEFAULT_AVATAR;
-
-// Fetch latest from API and update UI
+/**
+ * Fetches the current user's avatar from the API and updates all avatar elements on the page.
+ * If the avatar is missing, it sets the default avatar instead.
+ * @async
+ * @returns {Promise<void>} A promise that resolves once the avatar is fetched and UI is updated.
+ */
 async function fetchAndSetAvatar() {
   const username = localStorage.getItem("name");
   const token = localStorage.getItem("accessToken");
@@ -251,7 +228,13 @@ async function unfollowUser(username) {
     return false;
   }
 }
-
+/**
+ * Toggles the follow status of a user and updates the UI accordingly.
+ * @async
+ * @param {string} username - The username of the profile to follow/unfollow.
+ * @param {HTMLElement} btnEl - The button element to update after toggling.
+ * @returns {Promise<void>} A promise that resolves once the follow status is toggled.
+ */
 async function toggleFollow(username, btnEl) {
   if (!username || !btnEl) return;
 
@@ -401,7 +384,12 @@ editCloseFeelingsBtn.addEventListener("click", () => {
 });
 
 /*********create post function******************/
-
+/**
+ * Creates a new post by sending data to the Noroff API.
+ * Updates the feed and post count upon success.
+ * @async
+ * @returns {Promise<void>} A promise that resolves when the post is created and UI updated.
+ */
 async function createPost() {
   const postText = textarea.value.trim();
   const rawImageUrl = (imageUrlInput?.value || "").trim();
@@ -589,6 +577,8 @@ async function reactWithEmoji(postId, emoji) {
     console.error("reactWithEmoji error:", e);
   }
 }
+//solving console error
+
 //generate posts function
 async function generatePosts(posts, container) {
   if (!container || !posts) return;
@@ -679,6 +669,17 @@ async function generatePosts(posts, container) {
     postElement.dataset.postId = post.id;
     postElement.innerHTML = postHTML;
     container.appendChild(postElement);
+    // Avatar fallback
+    attachImgFallback(
+      postElement.querySelector(".user-profile img"),
+      DEFAULT_AVATAR
+    );
+
+    // Post image fallback (only exists if post has media)
+    attachImgFallback(
+      postElement.querySelector(".post-img"),
+      DEFAULT_POST_IMAGE
+    );
 
     // Add smiley to open detail modal
     const activityBar = postElement.querySelector(".activity-icons");
@@ -1206,6 +1207,15 @@ function renderPostDetail(post) {
       sendComment(post.id, ta);
     }
   });
+  attachImgFallback(
+    postDetailContent.querySelector(".pd-user-profile img"),
+    DEFAULT_AVATAR
+  );
+
+  attachImgFallback(
+    postDetailContent.querySelector(".pd-img"),
+    DEFAULT_POST_IMAGE
+  );
 }
 //Deletes a given post from the API and updates the UI accordingly.
 async function deletePost(postId) {

@@ -1,14 +1,17 @@
-// login.js
-
 const Noroff_API_Key = "384ffc1f-5fb6-497c-b8ef-68eb6ba14e6f";
 
 const loginForm = document.querySelector("#form");
 const message = document.querySelector(".message");
+const loader = document.getElementById("loader");
+hideLoader();
+function showLoader() {
+  document.getElementById("loader").style.display = "flex";
+}
 
-/**
- * Fetch the fresh profile after login and cache the avatar with a version,
- * so the navbar can cache-bust and show the updated image immediately.
- */
+function hideLoader() {
+  document.getElementById("loader").style.display = "none";
+}
+
 async function hydrateAvatarCache() {
   const accessToken = localStorage.getItem("accessToken");
   const username = localStorage.getItem("name");
@@ -30,66 +33,56 @@ async function hydrateAvatarCache() {
     const url = (data?.avatar?.url || "").trim();
     if (url) {
       localStorage.setItem("avatarUrl", url);
-      localStorage.setItem("avatarVer", String(Date.now())); // cache-buster
-    } else {
-      localStorage.removeItem("avatarUrl");
-      localStorage.removeItem("avatarVer");
-    }
-  } catch (e) {
-    // Non-fatal; continue to app
-    console.warn("Could not hydrate avatar cache:", e);
-  }
-}
-
-async function loginUser(userdetails) {
-  try {
-    const fetchOptions = {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(userdetails),
-    };
-
-    const response = await fetch(
-      "https://v2.api.noroff.dev/auth/login",
-      fetchOptions
-    );
-    const result = await response.json();
-
-    if (!response.ok) {
-      const msg =
-        result?.errors?.map((err) => err.message).join(", ") ||
-        "Something went wrong.";
-      message.textContent = msg;
-      console.error("API error:", result);
-      return;
-    }
-
-    // Store essentials
-    localStorage.setItem("accessToken", result.data.accessToken);
-    localStorage.setItem("name", result.data.name);
-
-    // Seed avatar from login payload (may be stale), then hydrate from server
-    if (result.data.avatar?.url) {
-      localStorage.setItem("avatarUrl", result.data.avatar.url);
       localStorage.setItem("avatarVer", String(Date.now()));
     } else {
       localStorage.removeItem("avatarUrl");
       localStorage.removeItem("avatarVer");
     }
-
-    message.textContent = "Login successful!";
-
-    // Get fresh avatar BEFORE entering the app so navbar shows it instantly
-    await hydrateAvatarCache();
-
-    // Go to your app
-    window.location.href = "index.html";
-  } catch (error) {
-    message.textContent = "Network error. Please try again later.";
-    console.error("Fetch error:", error);
+  } catch (e) {
+    console.warn("Could not hydrate avatar cache:", e);
   }
 }
+/**
+ * Logs in the user by sending credentials to the Noroff API.
+ * @param {Object} userdetails - The login details.
+ * @param {string} userdetails.email - The user's email address.
+ * @param {string} userdetails.password - The user's password.
+ * @returns {Promise<void>} A promise that resolves when login is complete.
+ */
+async function loginUser(userdetails) {
+  showLoader(); // Show loader when login starts
+  message.textContent = "";
 
+  try {
+    const response = await fetch("https://v2.api.noroff.dev/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(userdetails),
+    });
+    const result = await response.json();
+
+    if (!response.ok) {
+      hideLoader(); // Stop loader on login error
+      message.textContent =
+        result?.errors?.map((err) => err.message).join(", ") || "Login failed.";
+      return;
+    }
+
+    localStorage.setItem("accessToken", result.data.accessToken);
+    localStorage.setItem("name", result.data.name);
+
+    hideLoader(); // Stop loader before leaving
+    window.location.href = "feed.html"; // Go to main page
+  } catch (err) {
+    hideLoader(); // Stop loader on network error
+    message.textContent = "Network error. Please try again.";
+  }
+}
+/**
+ * Handles form submission, validates email, and calls the login function.
+ * @param {Event} e - The form submit event.
+ * @returns {void}
+ */
 function formSubmit(e) {
   e.preventDefault();
 
