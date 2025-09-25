@@ -1447,7 +1447,7 @@ async function main() {
   if (currentPage.includes("login-user.html") && profileFeedContainer) {
     console.log("Login-user page → handled by login-user.js");
   } else if (mainFeedContainer) {
-    console.log("Main feed → showing all posts");
+    console.log("showing all posts");
     const allPosts = await fetchPosts(true);
     allPostsCache = allPosts.slice();
     generatePosts(allPosts, mainFeedContainer);
